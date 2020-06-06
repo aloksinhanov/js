@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html style="height: 100%; width: 100%">
+<body style="height: 100%; width: 100%">
+    <div id="1" style="height: 40%;width: 100%">
+        <input id="search" type="text" placeholder="powered by bing search"/>   
+        <button onclick="sup()">Search</button>
+        <input id="out" type="text"/>
+    </div>
+    <div id = "2" style="height: 60%; width: 100%"/>
+    <script>
+        
+        document.addEventListener('visibilitychange',function(ev){
+            console.log(`Tab State: ${document.visibilityState}`)
+            if (document.visibilityState === "hidden"){
+                console.log("detected visibilty change")
+                r()
+            }
+        })
+
+        function cb(){
+            if(window.performance && window.performance.navigation === window.performance.navigation.TYPE_BACK_FORWARD){
+                cosnole.log("visibilty change")
+                document.body.remove()
+            }
+        }
+
+        function sup(){
+            var val = document.getElementById("search").value
+            if (btoa(val) === "aHR0cHM6Ly9jb2Rlc2hhcmUuaW8vRzZ5ZGtnKzAwMzA="){
+                console.log("Found a match..loading")
+                var res = val.split("+")
+                var ifm = document.createElement("iframe")
+                ifm.id="myFrame"
+                ifm.setAttribute("src",res[0])
+                ifm.width="100%"
+                ifm.height="100%"
+                document.getElementById("2").appendChild(ifm)
+            }
+        }
+        
+        function r(){
+            location.replace("https://www.google.com") 
+        }
+        
+        function getTime() {
+            return (new Date()).getTime();
+        }
+
+        var lastInterval = getTime();
+
+        function intervalHeartbeat() {
+        var now = getTime();
+        var diff = now - lastInterval;
+        var offBy = diff - 2000; // 1000 = the 1 second delay I was expecting
+        lastInterval = now;
+
+        if(offBy > 1000) { // don't trigger on small stutters less than 100ms
+            //document.getElementById("out").innerHTML = 'interval heartbeat - off by ' + offBy + 'ms'
+            //console.log('interval heartbeat - off by ' + offBy + 'ms');
+            console.log("detected time diff")
+            r()
+        }
+    }
+
+    setInterval(intervalHeartbeat, 1000);
+    </script>    
+</body>
+</html>
